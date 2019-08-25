@@ -21,7 +21,8 @@ SB_PLL40_CORE top_pll_inst(.REFERENCECLK(REFERENCECLK),
                            .SDO(),
                            .SCLK());
 
-//\\ Fin=16, Fout=25.175;
+//
+// Fout = Fref (DIVF + 1) / ((2^DIVQ)*(DIVR+1))
 defparam top_pll_inst.DIVR = 4'b0000;
 defparam top_pll_inst.DIVF = 7'b0110001;
 defparam top_pll_inst.DIVQ = 3'b101;

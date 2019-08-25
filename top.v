@@ -12,6 +12,23 @@ module top (
     output PIN_17,
     output PIN_18
     );
+
+
+    // To change output mode, only these parameters and the PLL need to be changed.
+    // PLL output should be set to the pixel clock
+    // See also http://tinyvga.com/vga-timing
+    localparam SCREEN_WIDTH = 640;
+    localparam LINE_LENGTH = 800;
+    localparam H_SYNC_START = SCREEN_WIDTH + 16;
+    localparam H_SYNC_SIZE = 96;
+
+    localparam SCREEN_HEIGHT= 480;
+    localparam NUMBER_LINES = 525;
+    localparam V_SYNC_START = SCREEN_HEIGHT + 10;
+    localparam V_SYNC_SIZE  = 2;
+
+
+
     wire unused_clk;
     wire CLK;
     top_pll top_pll_inst(.REFERENCECLK(PIN_CLK),
@@ -38,15 +55,10 @@ module top (
 
     reg [15:0] pixel_counter = 0;
 
-    localparam SCREEN_WIDTH = 640;
-    localparam LINE_LENGTH = 800;
-    localparam H_SYNC_START = SCREEN_WIDTH + 16;
-    localparam H_SYNC_SIZE = 96;
 
-    localparam SCREEN_HEIGHT= 480;
-    localparam NUMBER_LINES = 525;
-    localparam V_SYNC_START = SCREEN_HEIGHT + 10;
-    localparam V_SYNC_SIZE  = 2;
+
+
+
     always @ ( posedge CLK ) begin
       pixel_counter <= pixel_counter + 1;
       if (pixel_counter == LINE_LENGTH-1) begin
