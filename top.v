@@ -2,7 +2,7 @@
 
 // look in pins.pcf for all the pin names on the TinyFPGA BX board
 module top (
-    input CLK,    // 16MHz clock
+    input PIN_CLK,    // 16MHz clock
     output LED,   // User/boot LED next to power LED
     output USBPU,  // USB pull-up resistor
 
@@ -12,6 +12,12 @@ module top (
     output PIN_17,
     output PIN_18
     );
+    wire unused_clk;
+    wire CLK;
+    top_pll top_pll_inst(.REFERENCECLK(PIN_CLK),
+                         .PLLOUTCORE(unused_clk),
+                         .PLLOUTGLOBAL(CLK),
+                         .RESET(1'b1));
 
     wire on_screen = (pixel_counter < 417) && (line_counter < 480);
     assign PIN_14 = red && on_screen;
