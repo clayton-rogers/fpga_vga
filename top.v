@@ -23,44 +23,53 @@ module top (
     assign USBPU = 0;
     assign LED = 1'b1;
 
-    reg red = 1'b0;
-    reg green = 1'b0;
-    reg blue = 1'b0;
+    reg red;
+    reg green;
+    reg blue;
     reg h_sync = 1'b1;
     reg v_sync = 1'b1;
 
     reg [15:0] pixel_counter = 0;
 
+    localparam LINE_LENGTH = 508;
     always @ ( posedge CLK ) begin
       pixel_counter <= pixel_counter + 1;
-      if (pixel_counter == 454) begin
+      if (pixel_counter == LINE_LENGTH-1) begin
         pixel_counter <= 0;
       end
     end
 
     always @ ( posedge CLK ) begin
-      if (pixel_counter == 366)
+      if (pixel_counter == 420-1)
         h_sync <= 1'b0;
-      if (pixel_counter == 398)
+      if (pixel_counter == (420+61)-1)
         h_sync <= 1'b1;
     end
 
     reg [15:0] line_counter = 0;
 
+
     always @ ( posedge CLK ) begin
-      if (pixel_counter == 454) begin
+      if (pixel_counter == LINE_LENGTH-1) begin
         line_counter <= line_counter + 1;
-        if (line_counter == 625) begin
+        if (line_counter == 525) begin
           line_counter <= 0;
         end
       end
     end
 
     always @ ( posedge CLK ) begin
-      if (line_counter == 601)
+      if (line_counter == (480+10))
         v_sync <= 1'b0;
-      if (line_counter == 603)
+      if (line_counter == (480+10+2))
         v_sync <= 1'b1;
+    end
+
+    always @ ( * ) begin
+      red = line_counter <20;
+      green = line_counter == 0;
+      blue = line_counter == 0;
+
     end
 
 endmodule
