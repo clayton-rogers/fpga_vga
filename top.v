@@ -13,9 +13,10 @@ module top (
     output PIN_18
     );
 
-    assign PIN_14 = red;
-    assign PIN_15 = green;
-    assign PIN_16 = blue;
+    wire on_screen = (pixel_counter < 417) && (line_counter < 480);
+    assign PIN_14 = red && on_screen;
+    assign PIN_15 = green && on_screen;
+    assign PIN_16 = blue && on_screen;
     assign PIN_17 = h_sync;
     assign PIN_18 = v_sync;
 
@@ -66,9 +67,9 @@ module top (
     end
 
     always @ ( * ) begin
-      red = line_counter <20;
-      green = line_counter == 0;
-      blue = line_counter == 0;
+      red = line_counter[0] == 1'b1 && pixel_counter[1] == 1'b1;
+      green = line_counter[1] == 1'b1 && pixel_counter[2] == 1'b1;
+      blue = line_counter[2] == 1'b1 && pixel_counter[3] == 1'b1;
 
     end
 
